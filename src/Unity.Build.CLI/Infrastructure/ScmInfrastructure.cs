@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Unity.Build.CLI
+namespace Unity.Build.CLI.Infrastructure
 {
     internal static class ScmInfrastructure
     {
@@ -40,7 +35,7 @@ namespace Unity.Build.CLI
 
             directoryPath = CanCloneToLocal(directoryPath) && !string.IsNullOrEmpty(subfolderName) ? Path.Combine(directoryPath, subfolderName) : string.Empty;
 
-            ExecuteScmCommand(ScmUseByCli, $"clone {projectUrl} {directoryPath}");
+            ProcessInfrastructure.ConfigureAndExecuteProcess(ScmUseByCli, $"clone {projectUrl} {directoryPath}");
 
             static bool CanCloneToLocal(string? directoryPath) => !string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath);
         }
@@ -59,23 +54,7 @@ namespace Unity.Build.CLI
             string defaultName = branchName ?? "master";
             string command = $"config --global init.defaultBranch {defaultName}";
 
-            ExecuteScmCommand(ScmUseByCli, command);
-        }
-
-        public static void ExecuteScmCommand(string scmName, string command, int processWaitTime = 10_000)
-        {
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = $"{scmName}",
-                    Arguments = command,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                }
-            };
-
-            process.Start();
-            process.WaitForExit(processWaitTime);
+            ProcessInfrastructure.ConfigureAndExecuteProcess(ScmUseByCli, command);
         }
     }
 }
