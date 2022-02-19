@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace Unity.Build.CLI
                 Console.WriteLine("We cannot move forward if the project's URL is missing.");
             }
 
-            directoryPath = CanCloneToLocal(directoryPath) ? Path.Combine(directoryPath, subfolderName) : string.Empty;
+            directoryPath = CanCloneToLocal(directoryPath) && !string.IsNullOrEmpty(subfolderName) ? Path.Combine(directoryPath, subfolderName) : string.Empty;
 
             ExecuteScmCommand(ScmUseByCli, $"clone {projectUrl} {directoryPath}");
 
