@@ -9,7 +9,7 @@ namespace Unity.Build.CLI
     {
         private static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<CloneOptions, GameBuildOptions>(args)
+            Parser.Default.ParseArguments<CloneOptions, GameBuildOptions, PublishingOptions>(args)
                 .WithParsed<CloneOptions>(options =>
                 {
                     ScmInfrastructure.SetGitDefaultBranchName();
@@ -19,6 +19,10 @@ namespace Unity.Build.CLI
                 {
                     UnityEditorInfrastructure.SetActiveBuildTarget(options.BuildTarget);
                     UnityEditorInfrastructure.BuildPlayer(options.UnityProjectLocalPath, options.ScriptFileName, options.BuildPlayerMethodName);
+                })
+                .WithParsed<PublishingOptions>(options =>
+                {
+                    PublishingInfrastructure.ArchiveDirectories(options.ArchiveFilePath, new [] { options.AssetsDirectoryPath, options.LogsDirectoryPath });
                 })
                 .WithNotParsed(_ => Console.WriteLine("An error occurred while trying to parse the given user input."));
         }
