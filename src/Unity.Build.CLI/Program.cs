@@ -1,6 +1,20 @@
-﻿using Unity.Build.CLI;
+﻿using System;
+using CommandLine;
+using Unity.Build.CLI.ArgumentParsing;
 
-
-
-ScmInfrastructure.SetGitDefaultBranchName();
-ScmInfrastructure.CloneFromGit("https://github.com/wrossmck/2d-platformer/", "C:\\sources/2d-platformer", "2d-platformer");
+namespace Unity.Build.CLI
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Parser.Default.ParseArguments<CloneOptions>(args)
+                .WithParsed<CloneOptions>(options =>
+                {
+                    ScmInfrastructure.SetGitDefaultBranchName();
+                    ScmInfrastructure.CloneFromGit(options.ProjectUrl, options.DirectoryPath, options.SubDirectoryPath);
+                })
+                .WithNotParsed(_ => Console.WriteLine("An error occurred while trying to parse the given user input."));
+        }
+    }
+}
