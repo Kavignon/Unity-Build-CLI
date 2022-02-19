@@ -7,9 +7,15 @@ namespace Unity.Build.CLI.Infrastructure
         /// <summary>
         /// Executes configured processes from the input.
         /// </summary>
-        /// <param name="applicationName"></param>
-        /// <param name="command"></param>
-        /// <param name="processWaitTime"></param>
+        /// <param name="applicationName">
+        ///     The application that will be executed by the process.
+        /// </param>
+        /// <param name="command">
+        ///     The command that the application must execute.
+        /// </param>
+        /// <param name="processWaitTime">
+        ///     The allocated amount of time given to process before we stop it.
+        /// </param>
         /// <remarks>
         ///     On machines that have installed a version of Windows equal or higher than Windows Vista,
         ///     executing a process will now enter in admin mode.
